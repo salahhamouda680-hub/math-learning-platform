@@ -5,6 +5,14 @@ import type { GeometryLesson } from "../../lib/geometry";
 
 const levels = ["سهل", "متوسط", "متقدم"];
 
+// Keep calculations and degree signs in their written order inside Arabic prose.
+function withMathDirection(text: string) {
+  const math = /([٠-٩]+°?(?:√[٠-٩]+|(?: [+=−×÷] [٠-٩]+°?)+)|[٠-٩]+°)/;
+  return text.split(math).map((part, index) =>
+    index % 2 === 0 ? part : <bdi key={index} dir="ltr">{part}</bdi>,
+  );
+}
+
 function LessonSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="panel space-y-4 leading-8">
@@ -35,7 +43,7 @@ export default function GeometryLessonContent({
         </ul>
       </LessonSection>
       <LessonSection title="مراجعة سريعة">
-        <p>{lesson.review}</p>
+        <p>{withMathDirection(lesson.review)}</p>
       </LessonSection>
       <LessonSection title="شرح الدرس خطوة بخطوة">
         <figure className="rounded-xl bg-paper p-3 sm:p-4">
@@ -49,7 +57,7 @@ export default function GeometryLessonContent({
             <path d={diagram.outline} fill="var(--color-mint)" stroke="var(--color-ink)" strokeWidth="2" strokeLinejoin="round" />
             <path d={diagram.marks} fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             {diagram.exteriorArc && (
-              <path d={diagram.exteriorArc} fill="none" stroke="var(--color-amber-800)" strokeWidth="3" strokeLinecap="round" />
+              <path d={diagram.exteriorArc} fill="none" className="stroke-amber-800" strokeWidth="3" strokeLinecap="round" />
             )}
             <g fill="var(--color-ink)" fontSize="17" fontWeight="bold" textAnchor="middle">
               {diagram.labels.map(([x, y, label]) => <text key={label} x={x} y={y}>{label}</text>)}
@@ -61,7 +69,7 @@ export default function GeometryLessonContent({
           {lesson.explanation.map(({ title, text, formula }) => (
             <li key={title}>
               <h3 className="font-bold">{title}</h3>
-              <p>{text}</p>
+              <p>{withMathDirection(text)}</p>
               {formula && (
                 <p dir="ltr" className="mt-2 w-fit rounded-lg bg-mint px-3 py-1 font-mono font-bold text-accent">{formula}</p>
               )}
@@ -72,33 +80,33 @@ export default function GeometryLessonContent({
       <LessonSection title="أمثلة محلولة">
         {lesson.examples.map(({ question, steps }) => (
           <div key={question} className="rounded-xl bg-paper p-4">
-            <h3 className="font-bold">{question}</h3>
+            <h3 className="font-bold">{withMathDirection(question)}</h3>
             <ol className="mt-2 list-decimal space-y-1 ps-5">
-              {steps.map((step) => <li key={step}>{step}</li>)}
+              {steps.map((step) => <li key={step}>{withMathDirection(step)}</li>)}
             </ol>
           </div>
         ))}
       </LessonSection>
       <LessonSection title="أخطاء شائعة">
         <ul className="notice list-disc space-y-1 ps-8">
-          {lesson.pitfalls.map((pitfall) => <li key={pitfall}>{pitfall}</li>)}
+          {lesson.pitfalls.map((pitfall) => <li key={pitfall}>{withMathDirection(pitfall)}</li>)}
         </ul>
       </LessonSection>
       <LessonSection title="ملخص الدرس">
-        <p>{lesson.summary}</p>
+        <p>{withMathDirection(lesson.summary)}</p>
       </LessonSection>
       <LessonSection title="جرّب بنفسك">
         {lesson.exercises.map(([question, solution], index) => (
           <div key={question} className="rounded-xl bg-paper p-4">
             <h3 className="font-bold">{levels[index]}</h3>
-            <p className="mt-1">{question}</p>
+            <p className="mt-1">{withMathDirection(question)}</p>
             <details className="group mt-2">
               <summary className="min-h-11 cursor-pointer py-1.5 font-bold text-accent">
                 <span className="group-open:hidden">عرض الحل</span>
                 <span className="hidden group-open:inline">إخفاء الحل</span>
                 <span className="sr-only"> للتمرين {levels[index]}</span>
               </summary>
-              <p className="mt-1">{solution}</p>
+              <p className="mt-1">{withMathDirection(solution)}</p>
             </details>
           </div>
         ))}
