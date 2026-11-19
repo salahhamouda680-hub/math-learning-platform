@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import GeometryLessonContent from "../geometry-lesson-content";
 import { courseLabel, courses, subjectPath } from "../../../lib/catalog";
 
 type PageProps = { params: Promise<{ path: string[] }> };
@@ -36,6 +37,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function CatalogPage({ params }: PageProps) {
   const { course, unit, lesson } = resolvePath((await params).path);
 
+  const lessonIndex = unit?.lessons.findIndex((item) => item === lesson) ?? -1;
+
   return (
     <main className="shell min-h-[65vh] py-8 sm:py-12">
       <nav aria-label="مسار الصفحة" className="mb-6 flex flex-wrap gap-x-3 gap-y-2 text-sm font-bold text-accent">
@@ -47,7 +50,14 @@ export default async function CatalogPage({ params }: PageProps) {
       <h1 className="text-3xl leading-tight font-black sm:text-5xl">{lesson?.title ?? unit?.title ?? course.subject}</h1>
       <p className="notice mt-5">محتوى تدريبي تجريبي. لا يمثل المنهج المصري الرسمي.</p>
 
-      {lesson ? (
+      {lesson && unit && "diagram" in lesson ? (
+        <GeometryLessonContent
+          lesson={lesson}
+          unitPath={subjectPath(course.slug, unit.slug)}
+          previous={unit.lessons[lessonIndex - 1]}
+          next={unit.lessons[lessonIndex + 1]}
+        />
+      ) : lesson && "example" in lesson ? (
         <div className="mt-6 grid max-w-3xl gap-4">
           <section className="panel">
             <h2 className="text-xl font-bold">شرح الفكرة</h2>
