@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #172c29;
+  --color-muted: #51635d;
+  --color-accent: #00694f;
+  --color-paper: #f7f8f3;
+  --color-mint: #dff3e8;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+a:focus-visible, summary:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-9;
+  }
+
+  .button {
+    @apply inline-flex min-h-12 w-fit items-center gap-3 rounded-xl bg-accent px-5 py-3 font-bold text-white hover:bg-ink;
+  }
+
+  .panel {
+    @apply rounded-2xl border border-ink/12 bg-white p-5 sm:p-7;
+  }
+
+  .notice {
+    @apply rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-7 text-amber-950;
+  }
+}
