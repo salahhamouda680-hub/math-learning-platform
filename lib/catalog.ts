@@ -1,4 +1,6 @@
-export type Lesson = {
+import { geometryLessons, type GeometryLesson } from "./geometry";
+
+type PracticeLesson = {
   slug: string;
   title: string;
   description: string;
@@ -7,6 +9,8 @@ export type Lesson = {
   question: string;
   answer: string;
 };
+
+export type Lesson = PracticeLesson | GeometryLesson;
 
 type Unit = {
   slug: string;
@@ -77,6 +81,13 @@ export const courses: Course[] = [
             answer: "ثلاثة أتساع. نضرب البسط والمقام في ثلاثة.",
           },
         ],
+      },
+      {
+        slug: "geometry",
+        title: "الهندسة",
+        description: "تعلّم كيف تثبت التطابق وتحسب الأطوال والزوايا في المثلثات والمضلعات.",
+        symbol: "△",
+        lessons: geometryLessons,
       },
     ],
   },
